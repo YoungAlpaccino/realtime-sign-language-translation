@@ -17,6 +17,8 @@ fastapi>=0.110,<1
 uvicorn[standard]>=0.29,<1
 sqlmodel>=0.0.16,<1
 pydantic>=2.6,<3
+python-jose>=3.3,<4          # JWT (HS256) for WS/REST auth
+httpx>=0.27,<1               # FastAPI TestClient (backend tests)
 
 # Sign-language / NLP
 transformers>=4.40,<5

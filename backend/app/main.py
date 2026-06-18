@@ -83,7 +83,7 @@ async def list_transcripts(session_id: str) -> list[Transcript]:
         return list(rows)
 
 
-@app.get("/api/artifacts/{name}")
+@app.get("/api/artifacts/{name:path}")
 async def get_artifact(name: str) -> FileResponse:
     """Serve an ONNX / KenLM artifact by name (e.g. onnx/recognizer_ctr_gcn.onnx)."""
     # Prevent path traversal; resolve under ARTIFACTS_DIR only.

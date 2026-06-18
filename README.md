@@ -31,16 +31,39 @@ Real signing is continuous: signs co-articulate, fingerspelling bursts in, and t
   └───────────────────────────┘        └──────────────────────────────┘      └──────────────────────────────┘
 ```
 
-## Quickstart (TODO)
+## Quickstart
 
 ```bash
-# TODO: python -m venv .venv && source .venv/bin/activate
-# TODO: pip install -r requirements.txt
-# TODO: pytest -q
-# TODO: uvicorn backend.app.main:app --reload
-# TODO: cd frontend && npm install && npm run dev
-# TODO: python edge/run.py --backend ws://localhost:8000/ws
+# 1. Python env + deps (mediapipe is optional, edge-only).
+python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+# 2. Run the test suite (core pieces, models, ONNX parity, backend, Python<->TS parity).
+pytest                                                # 14 tests, ~12s
+
+# 3. Export the (random-weight) recognizer ONNX so all three surfaces are runnable.
+python scripts/export_demo_onnx.py                    # -> artifacts/onnx/recognizer_*.onnx
+
+# 4. Backend (serves ONNX + LM artifacts, WS hub, JWT, transcripts).
+uvicorn backend.app.main:app --reload --app-dir .
+
+# 5. Browser demo (webcam -> MediaPipe -> onnxruntime-web -> skeleton + caption).
+cd frontend && npm install && npm run dev             # http://localhost:5173
+
+# 6. Edge runner (Raspberry Pi / any camera) — requires `pip install mediapipe`.
+python edge/run.py --backend ws://localhost:8000/ws
 ```
+
+### Status
+
+Target **A (runnable end-to-end demo)** is implemented: the build/test infra,
+the portable core (pose normalization, CTC collapse, keypoint codec, spatial
+graph), the ST-GCN / CTR-GCN + Conformer + CTC recognizer, ONNX export with
+Python↔TS↔ONNX parity, the FastAPI WS hub + JWT + SQLite transcripts, and the
+browser webcam demo all run today. **The served recognizer uses random weights**
+— gloss/caption are structurally live but not yet meaningful. Producing real
+WER/BLEU numbers is Target B (training on PHOENIX-2014T / WLASL etc.); see
+[ROADMAP.md](ROADMAP.md) Phases 1–6.
 
 ## Links
 

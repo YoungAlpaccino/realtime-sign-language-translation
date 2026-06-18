@@ -24,7 +24,7 @@ include = ["sign_rt*"]
 [tool.pytest.ini_options]
 # Make `import sign_rt` resolve without an editable install, and find tests
 # in both the top-level tests/ and the core package tests/.
-pythonpath = ["core"]
+pythonpath = ["core", "."]
 testpaths = ["tests", "core/sign_rt/tests", "backend/tests"]
 addopts = "-q"
 filterwarnings = ["ignore::DeprecationWarning"]
