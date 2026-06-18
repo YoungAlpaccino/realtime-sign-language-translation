@@ -1,0 +1,52 @@
+# sign-rt — CSLR training config (CTR-GCN + Conformer + CTC)
+# Hyperparameters drawn from RESEARCH.md §6 / §7.
+
+seed: 0
+
+data:
+  dataset: phoenix14t          # phoenix14t | csl_daily | wlasl | how2sign
+  root: data/
+  fps: 25                      # frames per second for windowing
+  use_face_keypoints: true     # eyes/mouth carry grammatical markers
+
+pose:
+  n_pose: 33
+  n_hand: 21                   # x2 (left + right)
+  n_face: 70                   # curated face-contour subset
+  normalize: shoulder_width    # body-centered, shoulder-width-scaled
+
+model:
+  spatial_backbone: ctr_gcn    # st_gcn | ctr_gcn
+  d_model: 256
+  conformer_layers: 6
+  conformer_heads: 4
+  window_frames: 64            # rolling-buffer window
+  right_context: 8             # look-ahead frames (~320 ms @ 25 FPS)
+  vocab_size: 1296             # gloss vocab + CTC blank (placeholder)
+
+train:
+  epochs: 80
+  batch_size: 8
+  lr: 3.0e-4
+  amp: true                    # mixed precision
+  optimizer: adamw
+  weight_decay: 0.01
+
+augment:                       # keypoint augmentation suite
+  bone_length_jitter: 0.05
+  temporal_warp: 0.1
+  hand_dropout: 0.1
+  mirror: true                 # mirror + handedness relabel
+
+decode:
+  beam_width: 8
+  kenlm_path: artifacts/kenlm/phoenix.arpa
+  lm_alpha: 0.5                # shallow-fusion LM weight
+  lm_beta: 0.0                 # word-insertion bonus
+
+quantize:
+  int8: false                  # enable for edge (Phase 3)
+
+export:
+  opset: 17
+  parity_max_logit_delta: 1.0e-2   # CI gate across surfaces

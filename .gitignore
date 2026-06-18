@@ -1,0 +1,29 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Models / artifacts
+models/*.onnx
+artifacts/onnx/
+artifacts/kenlm/
+artifacts/checkpoints/
+*.onnx
+
+# Data
+data/raw/
+data/**/raw/
+
+# Databases
+*.db
+
+# Frontend
+node_modules/
+dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

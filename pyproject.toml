@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sign-rt"
+version = "0.0.1"
+description = "Real-time continuous sign-language recognition & translation (pose-first, edge-capable)."
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools]
+# The importable package `sign_rt` lives under core/.
+package-dir = { "" = "core" }
+
+[tool.setuptools.packages.find]
+where = ["core"]
+include = ["sign_rt*"]
+
+[tool.pytest.ini_options]
+# Make `import sign_rt` resolve without an editable install, and find tests
+# in both the top-level tests/ and the core package tests/.
+pythonpath = ["core"]
+testpaths = ["tests", "core/sign_rt/tests", "backend/tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

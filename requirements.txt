@@ -1,0 +1,28 @@
+# sign-rt — Python dependencies (pinned loosely)
+
+# Training & arrays
+torch>=2.2,<3
+numpy>=1.26,<2
+
+# Inference / export
+onnx>=1.15,<2
+onnxruntime>=1.17,<2
+
+# Vision / pose
+opencv-python>=4.9,<5
+mediapipe>=0.10,<1
+
+# Backend
+fastapi>=0.110,<1
+uvicorn[standard]>=0.29,<1
+sqlmodel>=0.0.16,<1
+pydantic>=2.6,<3
+
+# Sign-language / NLP
+transformers>=4.40,<5
+sacrebleu>=2.4,<3
+jiwer>=3.0,<4
+# kenlm  # install from source for n-gram LM rescoring
+
+# Testing
+pytest>=8.1,<9
